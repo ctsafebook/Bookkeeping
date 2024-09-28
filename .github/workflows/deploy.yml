@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+# Add permissions to enable authentication
+permissions:
+  id-token: write  # Required for authentication
+  contents: read   # Required for checking out the repository
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -13,8 +18,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    # Use the updated version of google-github-actions/auth@v1
     - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v0
+      uses: google-github-actions/auth@v1
       with:
         workload_identity_provider: 'projects/extreme-outpost-436902-g4/locations/global/workloadIdentityPools/safe-book-github-pool/providers/github-provider'
         service_account: 'safebook-service-account@extreme-outpost-436902-g4.iam.gserviceaccount.com'
