@@ -1,0 +1,29 @@
+name: Deploy to Google Cloud
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v0
+      with:
+        workload_identity_provider: 'projects/extreme-outpost-436902-g4/locations/global/workloadIdentityPools/safe-book-github-pool/providers/github-provider'
+        service_account: 'safebook-service-account@extreme-outpost-436902-g4.iam.gserviceaccount.com'
+
+    - name: Set up gcloud
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: 'extreme-outpost-436902-g4'
+
+    - name: Deploy app
+      run: |
+        gcloud app deploy --quiet
